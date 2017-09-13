@@ -1,15 +1,16 @@
-var categories = {category: ['Round Neck', 'Crew Neck', 'Collarless']};
-var sizes = {size: ['L', 'M', 'XL']};
-var colors = {color: ['black', 'white', 'green', 'blue', 'grey']};
-var prices = {price: ['low', 'high']};
+var categories = {name: 'Categories', category: ['Round Neck', 'Crew Neck', 'Collarless']};
+var sizes = {name: 'Sizes', size: ['L', 'M', 'XL']};
+var colors = {name: 'Colors', color: ['black', 'white', 'green', 'blue', 'grey']};
+var prices = {name: 'Prices', price: ['low', 'high']};
 
 var createOption = function (data) {
 	var html = '';
-	html += '<option value="0"></option>';
+	html += '<option value="0">' + data.name +'</option>';
+	delete data.name;
 	for (value in data) {
 		
 		for (key in data[value]) {
-
+			
 			if (localStorage[value] == data[value][key]) {
 				html += '<option value="'+ data[value][key] +'" selected>' + data[value][key] +'</option>';
 			} else {
