@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-	var dataFilter;
+	var aData = {};
     var products = [
     	{
     		id: 1,
@@ -35,13 +35,22 @@ $(document).ready(function(){
     		category: 'Collarless',
     		img: 'https://gloimg.gbtcdn.com/gb/pdm-product-pic/Clothing/2016/03/30/gridclothes/20160330122204_57648.jpg',
     		size: ['XL'],
-    		price: '150',
+    		price: '250',
+    		color: ['black']
+    	},
+		{
+    		id: 5,
+    		name: 'Color Spliced Stripes Print Round',
+    		category: 'Collarless',
+    		img: 'https://gloimg.gbtcdn.com/gb/pdm-product-pic/Clothing/2016/03/30/gridclothes/20160330122204_57648.jpg',
+    		size: ['XL'],
+    		price: '350',
     		color: ['black']
     	},
 
     ];
 
-
+	/* show to block of products */
     var showProducts = function (obj) {
     	$('#content').html();
     	var productHtml = '';
@@ -49,42 +58,118 @@ $(document).ready(function(){
 
         	productHtml += '<div class="col-md-4">';
         	productHtml += '<div class="product-img"><img src="'+ obj[key].img + '"></div>';
-        	productHtml += '<div class="product-img">'+ obj[key].name + ' <b>' + obj[key].price + '$</b></div>';
+        	productHtml += '<div class="product-name"><a href="product.html">'+ obj[key].name + '</a><b>' + obj[key].price + '$</b></div>';
         	productHtml += '</div>';
         }
 
         return productHtml;
     };
 
+	/* sort products */
+	var sort = function (data) {
+		var sortData = [];
+		console.log(data)
+		for (key in data) {
+			switch (key) {
+				case 'category':
+				
+					if (sortData.length == 0) {
 
-    var checkLocalStorage = function () {
-  
-    	if (localStorage['data']) {
+						products.filter(function(obj) {
 
-			dataFilter = JSON.parse(localStorage['data']);
-		} 
-console.log(dataFilter)
-		if (dataFilter != 0 && typeof dataFilter != "undefined" && dataFilter.length != 0) {
-			
-			return dataFilter;
-		} 
+							if (obj.category == data[key]) {
+								sortData.push(obj);
+							} 
+				
+						});
+					} else {
 
-		return dataFilter = products;
-    }();
+						var sortData = $.map(sortData, function(value, index) {
+							if (sortData[index].category == data[key]) {
+								return [value];
+							} 
+						});
+					}
+					break;
+				case 'color':
+					if (sortData.length == 0) {
+						products.filter(function(obj) {
+
+							for (var i = 0; i <= obj.color.length; i++) {
+							
+								if (obj.color[i] == data[key]) {
+									sortData.push(obj);
+								} 
+							}
+					
+						});
+					} else {	
+						var sortData = $.map(sortData, function(value, index) {
+							
+								if (sortData[index].color == data[key]) {
+									return [value];
+								} 
+						});
+					}
+				break;
+				
+				case 'size':
+					if (sortData.length == 0) {
+						products.filter(function(obj) {
+
+							for (var i = 0; i <= obj.size.length; i++) {
+								if (obj.size[i] == data[key]) {
+									sortData.push(obj);
+								} 
+							}
+					
+						});
+					} else {	
+						var sortData = $.map(sortData, function(value, index) {
+							
+							if (sortData[index].size == data[key]) {
+								return [value];
+							} 
+							
+						});
+					}
+				break;
+				
+				case 'price':
+					if (data[key] === 'high') {
+						sortData = sortData.sort(function (a, b) {
+							return b.price.localeCompare( a.price );
+						});
+					} else {
+						sortData = sortData.sort(function (a, b) {
+							return a.price.localeCompare(b.price);
+						});
+					}
+				break;
+					
+			}
+		}
+		if (jQuery.isEmptyObject(sortData)) {
+			$("#content").html('nothing found'); 
+		} else {
+			$("#content").html(showProducts(sortData)); 
+		}
+		
+	};
+	
+	/* start form of block of products */
+	(function () {
+		$("#content").html(showProducts(products));
+		
+		if (!$.isEmptyObject(localStorage)) {
+			for (key in localStorage) {
+				aData[key] = localStorage[key];
+			}
+			sort(aData);
+		}
+	}());
 
 
-
-    var checkInputValue = function (input) {
-
-    	if (input != 0) {
-    		 return true;
-    	}
-   
-    	$("#content").html(showProducts(dataFilter));
-    }
-
-
-$("#content").html(showProducts(dataFilter));
 
 	/* filter category */
     $('#filter_category').change(function(e) {
@@ -92,22 +177,16 @@ $("#content").html(showProducts(dataFilter));
         var $input = $(this),
         inputContent = $input.val();
 
-        if (checkInputValue(inputContent)) {
+        if (inputContent != 0) {
  		
-			var data = [];
-			dataFilter.filter(function(obj) {
-
-				if (obj.category == inputContent) {
-			    	data.push(obj);
-				} 
-		
-			});
-
-			localStorage['data'] = JSON.stringify(data);
 			localStorage['category'] = inputContent;
-
-       		$("#content").html(showProducts(data)); 
-        }
+			aData['category'] = inputContent;
+			sort(aData);
+			
+        } else {
+		   delete aData['category'];
+		   sort(aData);
+	   }
         
     });  
 
@@ -118,36 +197,21 @@ $("#content").html(showProducts(dataFilter));
         var input = $(this),
         inputContent = input.val();
 
-        if (checkInputValue(inputContent)) {
-
-
+        if (inputContent != 0) {
+			
             if (localStorage['data']) {
 
-            dataFilter = JSON.parse(localStorage['data']);
+				dataFilter = JSON.parse(localStorage['data']);
             } 
-
-
-			var data = [];
-			dataFilter.filter(function(obj) {
-
-				for (var i = 0; i <= obj.color.length; i++) {
-
-					if (obj.color[i] == inputContent) {
-				    	data.push(obj);
-					} 
-				}
-				
-			});
-            if (data.length == 0) {
-                $("#content").html('not find'); 
-            } else {
-                localStorage['data'] = JSON.stringify(data);
-                localStorage['color'] = inputContent;
-
-                $("#content").html(showProducts(data)); 
-            }
 			
-       }
+			localStorage['color'] = inputContent;
+			aData['color'] = inputContent;
+			sort(aData);
+			
+       } else {
+		   delete aData['color'];
+		   sort(aData);
+	   }
     }); 
 
     /* filter size */
@@ -156,59 +220,35 @@ $("#content").html(showProducts(dataFilter));
         var input = $(this),
         inputContent = input.val();
 
-        if (checkInputValue(inputContent)) {
-
-               if (localStorage['data']) {
-
-            dataFilter = JSON.parse(localStorage['data']);
-            } 
-    		var data = [];
-    		dataFilter.filter(function(obj) {
-
-    			for (var i = 0; i <= obj.color.length; i++) {
-
-    				if (obj.size[i] == inputContent) {
-    			    	data.push(obj);
-    				} 
-    			}
-    			
-    		});
+        if (inputContent != 0) {
             
-            if (data.length == 0) {
-                $("#content").html('not find'); 
-            } else {
-                localStorage['data'] = JSON.stringify(data);
-                localStorage['size'] = inputContent;
-
-                $("#content").html(showProducts(data));
-            }
-        }
+            localStorage['size'] = inputContent;
+			aData['size'] = inputContent;
+			sort(aData);
+			
+		} else {
+		   delete aData['size'];
+		   sort(aData);
+		}
+    
     }); 
-
 
     /* filter price */
    	$('#filter_price').change(function(e) {
        
         var input = $(this),
         inputContent = input.val();
-
-        if (checkInputValue(inputContent)) {
-    		var data = [];
-
-    		if (inputContent === 'high') {
-    			data = products.sort(function (a, b) {
-    		    	return b.price.localeCompare( a.price );
-    			});
-    		} else {
-    			data = products.sort(function (a, b) {
-    		    	return a.price.localeCompare(b.price);
-    			});
-    		}
-            localStorage['data'] = JSON.stringify(data);
+		
+		if (inputContent != 0) {
+            
             localStorage['price'] = inputContent;
-      		
-           	$("#content").html(showProducts(data)); 
-       }
+			aData['price'] = inputContent;
+			sort(aData);
+			
+		} else {
+		   delete aData['price'];
+		   sort(aData);
+		}
     });
 	
 	/* clear filter  */
@@ -216,6 +256,6 @@ $("#content").html(showProducts(dataFilter));
         localStorage.clear();
         location.reload();
     });
-    
-  
+	
+
 });  
