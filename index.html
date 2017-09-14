@@ -10,6 +10,9 @@
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- style -->
+    <link rel="stylesheet" href="css/style.css">
+
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -22,39 +25,42 @@
 	<div class="container">
 		<h1>Shop</h1>
 	    <div class="row">
-	        <div class="panel panel-primary filterable">
-	            <div class="panel-heading">
-	                <h3 class="panel-title">
-	                    Shop T-Shirt
-	                </h3>
-	            </div>
-	            <table class="table">
-                    <tr class="filters">
-                        <th>
-                            <select class="form-control" id="filter_category"></select>
-                        </th>                    
-                        <th>
-                        	<select class="form-control" id="filter_size"></select>
-                        </th>
-                        <th>
-                        	<select class="form-control" id="filter_color"></select>
-                        </th>
-                        <th>
-                        	<select class="form-control" id="filter_price"></select>
-                        </th>
-                        <th>
-                        	<button id="filter_clear">Clear filter</button>
-                        </th>
-                    </tr>
-	            </table>
-	        </div>
-	        <div id="content"></div>
+	    	<div class="col-md-12">
+		        <div class="panel panel-primary filterable">
+		            <div class="panel-heading">
+		                <h3 class="panel-title">
+		                    Shop T-Shirt
+		                </h3>
+		            </div>
+		            <table class="table">
+	                    <tr class="filters">
+	                        <th>
+	                            <select class="form-control" id="filter_category"></select>
+	                        </th>                    
+	                        <th>
+	                        	<select class="form-control" id="filter_size"></select>
+	                        </th>
+	                        <th>
+	                        	<select class="form-control" id="filter_color"></select>
+	                        </th>
+	                        <th>
+	                        	<select class="form-control" id="filter_price"></select>
+	                        </th>
+	                        <th>
+	                        	<button id="filter_clear">Clear filter</button>
+	                        </th>
+	                    </tr>
+		            </table>
+		        </div>
+		        <div id="content"></div>
+		    </div>
 	    </div>
 	</div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/data.js"></script>
     <script src="js/html.js"></script>
     <script src="js/filter.js"></script>
   </body>
